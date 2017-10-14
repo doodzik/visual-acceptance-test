@@ -13,12 +13,13 @@
   "license": "ISC",
   "devDependencies": {
     "fs-extra": "^4.0.2",
-    "mocha": "^4.0.1",
-    "node-fetch": "^1.7.3"
+    "mocha": "^4.0.1"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "listen-random-port": "^1.0.0",
     "node-static": "^0.7.10",
-    "server-destroy": "^1.0.1"
+    "server-destroy": "^1.0.1",
+    "node-fetch": "^1.7.3"
   }
 }
