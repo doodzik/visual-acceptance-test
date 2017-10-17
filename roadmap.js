@@ -1,29 +1,34 @@
 // TODO to async/await
 
+const Browser   = require('./src/browser')
+const browser   = new Browser()
+const staticDir = path.resolve('./to-build-dir')
+const server    = new FileServer({dir: staticDir})
+
 function build() {
   // TODO build
+  return Promise.resolve()
 }
 
-const staticDir = path.resolve('./to-build-dir')
-let server = new FileServer({dir: staticDir})
-server.listen().then(() => {
-
-  build()
+function screenshot({server, dir}) {
   let sitemap = browser.href({ host: server.host, port: server.port, path: 'sitemap.xml' })
 
-  let urls = await browser.urlsFrom({sitemap})
-  // TODO
-  await browser.take({dir: oldDir, urls, dimensions: ['1080w', '720w']})
+  return browser.urlsFrom({sitemap}).then(urls => {
+    return browser.take({dir, urls, dimensions: [{width: 1080}, {width: 720}]})
+  })
+}
 
-  time.past()
-  build()
-  let urls = await browser.urlsFrom({sitemap})
-  await browser.take({dir: newDir, urls, dimensions: ['1080w', '720w']})
 
-  time.now()
-  await snapshot.diff({destination: diffDir, old: oldDir, new: newDir})
-  confirmation.browser({dir: result})
+Promise.all([server.listen(), build()])
+.then(() => screenshot({server, dir: oldDir}))
+// TODO
+.then(time.past)
+.then(build)
+.then(() => screenshot({server, dir: newDir}))
+// TODO
+.then(time.now)
+.then(() => image.diff({destination: diffDir, old: oldDir, new: newDir}))
+.then(() => confirmation.browser({dir: diffDir}))
+// END TODO
+.then(server.destroy)
 
-  server.destroy()
-
-})

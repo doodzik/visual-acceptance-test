@@ -16,10 +16,12 @@
     "mocha": "^4.0.1"
   },
   "dependencies": {
+    "bluebird": "^3.5.1",
     "cheerio": "^1.0.0-rc.2",
     "listen-random-port": "^1.0.0",
+    "nightmare": "^2.10.0",
+    "node-fetch": "^1.7.3",
     "node-static": "^0.7.10",
-    "server-destroy": "^1.0.1",
-    "node-fetch": "^1.7.3"
+    "server-destroy": "^1.0.1"
   }
 }
