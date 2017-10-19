@@ -7,6 +7,8 @@ const FileServer = require('./src/file-server')
 const staticDir = path.resolve('./to-build-dir')
 const server    = new FileServer({dir: staticDir})
 
+const diff      = require('./src/diff')
+
 const Time      = require('./src/last-commit')
 const time      = new Time(__dirname)
 
@@ -30,11 +32,10 @@ function screenshot({server, dir}) {
   })
 }
 
-
 Promise.all([
-             server.listen(), 
-             build(), 
-             fs.remove(pathTo('HEAD'), 
+             server.listen(),
+             build(),
+             fs.remove(pathTo('HEAD'),
              fs.remove(pathTo('DIFF')
             ])
 .then(() => screenshot({server, dir: pathTo('HEAD')}))
@@ -43,12 +44,14 @@ Promise.all([
 .then(() => screenshot({server, dir: pathTo(time.pastCommit)}))
 .then(time.now)
 // TODO
-.then(() => image.diff({
-                        destination: pathTo('DIFF'),
-                        past: pathTo(time.pastCommit), 
-                        current: pathTo('HEAD'),
-                      }))
-.then(() => confirmation.browser({dir: diffDir}))
-// END TODO
+.then(() => {
+  return diff({
+                destination: pathTo('DIFF'),
+                past: pathTo(time.pastCommit),
+                current: pathTo('HEAD'),
+              })
+})
+// TODO
+.then(res => confirmation.browser(res))
 .then(server.destroy)
 

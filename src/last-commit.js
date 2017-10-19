@@ -31,3 +31,4 @@ class LastCommit {
 }
 
 module.exports = LastCommit
+

@@ -10,15 +10,11 @@ $ npm install doodzik/visual-acceptance-test
 
 # Usage
 
-For now you should look at the `roadmap.js` file to see what has been and has not been implemented.
-
-```
-#!/usr/bin/env node
-
-const { FileServer } = require('visual-acceptance-test')
-```
+For now you should look at the `examples` folder to see what has been and has not been implemented and how to use this project.
 
 # [Roadmap](https://github.com/doodzik/visual-acceptance-test/projects/1)
+
+# API
 
 # Author
 
