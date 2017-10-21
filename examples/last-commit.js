@@ -1,4 +1,4 @@
-// TODO to async/await
+// TODO to async/await http://coffeescript.org/#async-functions
 
 const Browser   = require('./src/browser')
 const browser   = new Browser()
@@ -43,12 +43,12 @@ Promise.all([
 .then(build)
 .then(() => screenshot({server, dir: pathTo(time.pastCommit)}))
 .then(time.now)
-// TODO
 .then(() => {
   return diff({
                 destination: pathTo('DIFF'),
                 past: pathTo(time.pastCommit),
                 current: pathTo('HEAD'),
+                threshhold: 5,
               })
 })
 // TODO

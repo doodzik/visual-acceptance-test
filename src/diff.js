@@ -13,12 +13,12 @@ function walk (dir) {
   })
 }
 
-function diff ({destination, past, current}) {
+function diff ({destination, past, current, threshhold}) {
   return Promise.all([walk(past), walk(current)])
   .then(res => {
     const [pastFiles, currentFiles] = res
     const files = Array.from(new Set([...pastFiles, ...currentFiles]))
-    return Promise.all(files.map(file => diffImage({destination, past, current, file})))
+    return Promise.all(files.map(file => diffImage({destination, past, current, file, threshhold})))
   })
   .then(results => results)
 }

@@ -23,6 +23,7 @@
     "nightmare": "^2.10.0",
     "node-fetch": "^1.7.3",
     "node-static": "^0.7.10",
+    "pngjs": "^3.3.0",
     "server-destroy": "^1.0.1",
     "simple-git": "^1.80.1"
   }
