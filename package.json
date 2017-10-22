@@ -17,12 +17,14 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
     "fs-extra": "^4.0.2",
     "klaw": "^2.1.0",
     "listen-random-port": "^1.0.0",
     "nightmare": "^2.10.0",
     "node-fetch": "^1.7.3",
     "node-static": "^0.7.10",
+    "openurl": "^1.1.1",
     "pngjs": "^3.3.0",
     "server-destroy": "^1.0.1",
     "simple-git": "^1.80.1"

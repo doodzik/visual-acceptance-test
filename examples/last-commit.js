@@ -12,6 +12,8 @@ const diff      = require('./src/diff')
 const Time      = require('./src/last-commit')
 const time      = new Time(__dirname)
 
+const confirmation = require('./src/confirmation')
+
 const fs = require('fs-extra')
 const path = require('path')
 
@@ -52,6 +54,6 @@ Promise.all([
               })
 })
 // TODO
-.then(res => confirmation.browser(res))
+.then(result => confirmation.browser({result}))
 .then(server.destroy)
 
