@@ -20,6 +20,7 @@ function diff ({destination, past, current, threshhold}) {
     const files = Array.from(new Set([...pastFiles, ...currentFiles]))
     return Promise.all(files.map(file => diffImage({destination, past, current, file, threshhold})))
   })
+  // TODO nest results & add name and path key -> children
   .then(results => results)
 }
 

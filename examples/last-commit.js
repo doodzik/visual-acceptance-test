@@ -53,7 +53,6 @@ Promise.all([
                 threshhold: 5,
               })
 })
-// TODO
 .then(result => confirmation.browser({result}))
 .then(server.destroy)
 

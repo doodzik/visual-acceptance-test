@@ -10,6 +10,12 @@ function diffImage ({destination, past, current, file, threshhold = 5}) {
 
   return evalPNGs(pastPath, currentPath, diffPath)
           .spread((png1, png2) => analyzePNGs(png1, png2, threshhold))
+          .then(stat => {
+            stat.expectedPngPath = pastPath
+            stat.actualPngPath   = currentPath
+            stat.diffPngPath     = diffPath
+            return stat
+          })
           .then(writeResult)
 }
 
@@ -59,10 +65,7 @@ function analyzePNGs (png1, png2, threshhold) {
 }
 
 function writeResult({png, stat}){
-    return Promise.all([
-      fs.writeJson(destination + '.json', stat),
-      writePNG(png, destination)
-    ])
+    writePNG(png, destination).then(() => stat)
 }
 
 function diffAnalyze(imgA, imgB, threshhold) {
@@ -72,7 +75,7 @@ function diffAnalyze(imgA, imgB, threshhold) {
     if (imgA.data[i] !== imgB.data[i]) stats.differences++
   }
   stats.delta = 100 * (1 - (stats.differences/stats.total))
-  stats.success = stats.delta < threshhold
+  stats.isEqual = stats.delta < threshhold
   return stats
 }
 

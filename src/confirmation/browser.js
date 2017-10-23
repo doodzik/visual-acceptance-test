@@ -1,8 +1,9 @@
-let http          = require("http")
-let enableDestroy = require('server-destroy')
-let listen        = require('listen-random-port')
-let express       = require('express')
-let openurl       = require("openurl").open
+const http          = require('http')
+const enableDestroy = require('server-destroy')
+const listen        = require('listen-random-port')
+const express       = require('express')
+const openurl       = require('openurl').open
+const {template}    = require('./browser-view/index')
 
 function destroy (server) {
   return new Promise((resolve, reject) => {
@@ -21,7 +22,8 @@ function confirmationBrowser({result, from = 1000, to = 9000, host = '127.0.0.1'
     var server
 
     app.get('/', (req, res) => {
-      // TODO create webpage
+      const html = template(result)
+      res.send(html)
     })
 
     app.post('/reject', (req, res) => {
