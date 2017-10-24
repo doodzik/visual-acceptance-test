@@ -1,5 +1,7 @@
 # visual-acceptance-test
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/doodzik/visual-acceptance-test.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/doodzik/visual-acceptance-test.svg?branch=master)](https://travis-ci.org/doodzik/visual-acceptance-test)
 
 This library provides a toolchain to create visual acceptance tests
