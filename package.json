@@ -7,14 +7,16 @@
     "test": "test"
   },
   "scripts": {
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+    "test": "mocha",
+    "coverage": "nyc check-coverage",
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "coveralls": "^3.0.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "nyc": "^11.2.1"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
@@ -31,5 +33,13 @@
     "pngjs": "^3.3.0",
     "server-destroy": "^1.0.1",
     "simple-git": "^1.80.1"
+  },
+  "nyc": {
+      "check-coverage": true,
+      "per-file": true,
+      "lines": 44,
+      "statements": 45,
+      "functions": 38,
+      "branches": 34
   }
 }
