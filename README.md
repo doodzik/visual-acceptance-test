@@ -1,5 +1,7 @@
 # visual-acceptance-test
 
+[![Build Status](https://travis-ci.org/doodzik/visual-acceptance-test.svg?branch=master)](https://travis-ci.org/doodzik/visual-acceptance-test)
+
 This library provides a toolchain to create visual acceptance tests
 
 # Installation
