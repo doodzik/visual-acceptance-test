@@ -1,21 +1,19 @@
-// TODO to async/await http://coffeescript.org/#async-functions
+const {
+  Browser, 
+  FileServer, 
+  Time, 
+  diff, 
+  confirmation
+} = require('../index')
 
-const Browser   = require('./src/browser')
+const fs        = require('fs-extra')
+const path      = require('path')
 const browser   = new Browser()
-
-const FileServer = require('./src/file-server')
+const time      = new Time.LastCommit(__dirname)
 const staticDir = path.resolve('./to-build-dir')
 const server    = new FileServer({dir: staticDir})
 
-const diff      = require('./src/diff')
-
-const Time      = require('./src/last-commit')
-const time      = new Time(__dirname)
-
-const confirmation = require('./src/confirmation')
-
-const fs = require('fs-extra')
-const path = require('path')
+const dimensions = [{width: 1080}, {width: 720}]
 
 function pathTo(dir) {
   return path.resolve(__dirname, '.visual-acceptance-test', dir)
@@ -26,33 +24,26 @@ function build() {
   return Promise.resolve()
 }
 
-function screenshot({server, dir}) {
-  let sitemap = browser.href({ host: server.host, port: server.port, path: 'sitemap.xml' })
-
-  return browser.urlsFrom({sitemap}).then(urls => {
-    return browser.take({dir, urls, dimensions: [{width: 1080}, {width: 720}]})
-  })
-}
-
 Promise.all([
              server.listen(),
              build(),
-             fs.remove(pathTo('HEAD'),
-             fs.remove(pathTo('DIFF')
+             fs.remove(pathTo('HEAD')),
+             fs.remove(pathTo('DIFF')),
             ])
-.then(() => screenshot({server, dir: pathTo('HEAD')}))
+.then(() => browser.screenshotSitemap({server, dir: pathTo('HEAD'), dimensions}))
 .then(time.past)
 .then(build)
-.then(() => screenshot({server, dir: pathTo(time.pastCommit)}))
+.then(() => browser.screenshotSitemap({server, dir: pathTo(time.pastCommit), dimensions}))
 .then(time.now)
 .then(() => {
   return diff({
                 destination: pathTo('DIFF'),
-                past: pathTo(time.pastCommit),
-                current: pathTo('HEAD'),
-                threshhold: 5,
+                past:        pathTo(time.pastCommit),
+                current:     pathTo('HEAD'),
+                threshhold:  5,
               })
 })
 .then(result => confirmation.browser({result}))
 .then(server.destroy)
+.catch(err => console.log("An error occured: " + err.message))
 

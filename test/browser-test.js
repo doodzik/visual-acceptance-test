@@ -3,9 +3,8 @@ let fetch      = require('node-fetch')
 let path       = require('path')
 
 let FileServer = require('../src/file-server')
-let Browser = require('../src/browser')
-let testDir = path.resolve('./test/browser-test-dir/')
-console.log(testDir)
+let Browser    = require('../src/browser')
+let testDir    = path.resolve('./test/browser-test-dir/')
 
 describe('Browser', function() {
   let server = new FileServer({dir: testDir})

@@ -54,7 +54,7 @@ class Browser {
     return urls
   }
 
-  // expected dimensionns, can be different when rendered [{height: 600, width: 800}]
+  // expected dimensions, can be different when rendered [{height: 600, width: 800}]
   take({dir, urls, dimensions = [{}]}) {
     var nightmare = new Nightmare({ show: false })
 
@@ -104,6 +104,15 @@ class Browser {
         })
       })
   }
+
+  screenshotSitemap({server, dir, dimensions}) {
+    let sitemap = this.href({ host: server.host, port: server.port, path: 'sitemap.xml' })
+
+    return this.urlsFrom({sitemap}).then(urls => {
+      return this.take({dir, urls, dimensions})
+    })
+  }
+
 }
 
 module.exports = Browser
