@@ -1,6 +1,6 @@
 # visual-acceptance-test
 
-[![Build Status](https://travis-ci.org/doodzik/visual-acceptance-test.svg?branch=master)](https://travis-ci.org/doodzik/visual-acceptance-test) [![Greenkeeper badge](https://badges.greenkeeper.io/doodzik/visual-acceptance-test.svg)](https://greenkeeper.io/) [![Coverage Status](https://coveralls.io/repos/github/doodzik/javascript-html-tags/badge.svg?branch=master)](https://coveralls.io/github/doodzik/javascript-html-tags?branch=master)
+[![Build Status](https://travis-ci.org/doodzik/visual-acceptance-test.svg?branch=master)](https://travis-ci.org/doodzik/visual-acceptance-test) [![Greenkeeper badge](https://badges.greenkeeper.io/doodzik/visual-acceptance-test.svg)](https://greenkeeper.io/) [![Coverage Status](https://coveralls.io/repos/github/doodzik/javascript-html-tags/badge.svg?branch=master)](https://coveralls.io/github/doodzik/javascript-html-tags?branch=master)[![Maintainability](https://api.codeclimate.com/v1/badges/9cbe308f2317f1339bc6/maintainability)](https://codeclimate.com/github/doodzik/visual-acceptance-test/maintainability)
 
 This library provides a toolchain to create visual acceptance tests
 

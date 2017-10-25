@@ -8,6 +8,9 @@
   },
   "scripts": {
     "test": "mocha",
+    "precommit": "npm test && npm run lint && depcheck . --ignores husky,depcheck,eslint-config",
+    "lint": "eslint . --fix --ignore-path .gitignore -c ./node_modules/eslint-config/.eslintrc.js ",
+    "lint-prod": "eslint . --fix --ignore-path .gitignore -c ./node_modules/eslint-config/.eslintrc.production.js ",
     "coverage": "nyc check-coverage",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
@@ -15,6 +18,10 @@
   "license": "ISC",
   "devDependencies": {
     "coveralls": "^3.0.0",
+    "depcheck": "^0.6.8",
+    "eslint": "^4.9.0",
+    "eslint-config": "github:doodzik/eslint-config",
+    "husky": "^0.14.3",
     "mocha": "^4.0.1",
     "nyc": "^11.2.1"
   },
@@ -35,11 +42,11 @@
     "simple-git": "^1.80.1"
   },
   "nyc": {
-      "check-coverage": true,
-      "per-file": true,
-      "lines": 44,
-      "statements": 45,
-      "functions": 38,
-      "branches": 34
+    "check-coverage": true,
+    "per-file": true,
+    "lines": 44,
+    "statements": 45,
+    "functions": 38,
+    "branches": 34
   }
 }

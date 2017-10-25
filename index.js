@@ -5,10 +5,10 @@ const diff         = require('./src/diff')
 const confirmation = require('./src/confirmation/index')
 
 module.exports = {
-  FileServer,
-  Browser,
-  Time,
-  diff,
-  confirmation,
+	FileServer,
+	Browser,
+	Time,
+	diff,
+	confirmation,
 }
 

@@ -20,7 +20,7 @@ function toggleMaxWidth(e) {
 }`
 
 function post(action) {
-  return `
+	return `
   function ${action} () {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '/${action}', true);
@@ -37,9 +37,9 @@ function post(action) {
 }
 
 module.exports = {
-  toggleMaxWidth,
-  toggleVisibility,
-  reject: post('reject'),
-  accept: post('accept'),
+	toggleMaxWidth,
+	toggleVisibility,
+	reject: post('reject'),
+	accept: post('accept'),
 }
 
