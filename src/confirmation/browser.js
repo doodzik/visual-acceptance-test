@@ -39,8 +39,7 @@ function confirmationBrowser({result, from = 1000, to = 9000, host = '127.0.0.1'
 		})
 
 		server = http.createServer(app)
-		enableDestroy(server)
-
+		enableDestroy(server) 
 		listen(server, { from, to, host }, (err, port) => {
 			let url = 'http://' + host + ':' + port
 			console.log('Confirmation Page at ' + url)

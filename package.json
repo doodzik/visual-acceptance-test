@@ -14,8 +14,8 @@
     "coverage": "nyc check-coverage",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Frederik Dudzik",
+  "license": "GPL3",
   "devDependencies": {
     "coveralls": "^3.0.0",
     "depcheck": "^0.6.8",
@@ -35,9 +35,9 @@
     "listen-random-port": "^1.0.0",
     "nightmare": "^2.10.0",
     "node-fetch": "^1.7.3",
-    "node-static": "^0.7.10",
     "openurl": "^1.1.1",
     "pngjs": "^3.3.0",
+    "serve-dir": "github:doodzik/serve-dir",
     "server-destroy": "^1.0.1",
     "simple-git": "^1.80.1"
   },

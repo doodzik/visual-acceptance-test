@@ -1,13 +1,12 @@
 var assert     = require('assert')
 let path       = require('path')
+let FileServer = require('serve-dir')
 
-let FileServer = require('../src/file-server')
-let Browser    = require('../src/browser')
+let browser    = require('../src/browser')
 let testDir    = path.resolve('./test/browser-test-dir/')
 
 describe('Browser', function() {
 	let server = new FileServer({dir: testDir})
-	let browser = new Browser()
 	let url = server.listen()
 
 	after(done => {

@@ -18,6 +18,11 @@ For now you should look at the `examples` folder to see what has been and has no
 
 # API
 
+## FileServer
+
+The documentation is available in the [serve-dir repo](https://github.com/doodzik/serve-dir)
+
 # Author
 
 [Frederik Dudzik](https://dudzik.co)
+

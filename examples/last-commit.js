@@ -1,5 +1,5 @@
 const {
-	Browser, 
+	browser, 
 	FileServer, 
 	Time, 
 	diff, 
@@ -8,7 +8,6 @@ const {
 
 const fs        = require('fs-extra')
 const path      = require('path')
-const browser   = new Browser()
 const time      = new Time.LastCommit(__dirname)
 const staticDir = path.resolve('./to-build-dir')
 const server    = new FileServer({dir: staticDir})
