@@ -1,56 +1,10 @@
-const url       = require('url')
-const { URL }   = url
-const cheerio   = require('cheerio')
-const fetch     = require('node-fetch')
+const { URL }   = require('url') 
 const Nightmare = require('nightmare')
 const path      = require('path')
 const Promise   = require('bluebird')
 const fs        = require('fs-extra')
 
-function href({protocol = 'http', username = '', password = '', hostname = '', port = '80', path = [], search = [], hash = '' }) {
-	// https:   //    user   :   pass   @ sub.host.com : 8080   /p/a/t/h  ?  query=string   #hash "
-	const auth = ((username.lenght + password.lenght) > 0) ? `${username}:${password}@` : ''
-	const host = `${hostname}:${port}`
-	const origin = `${protocol}://${auth}${host}/`
-
-	var pathPrepared = (typeof path === 'string' || path instanceof String) ? [path] : path
-	var pathConcated = pathPrepared.reduce((str, elm) => {
-		return url.resolve(str + '/', elm)
-	}, '')
-
-	const queryString = search.reduce((str, query) => {
-		let { key, value } = query
-		return `${str}${key}=${value}&`
-	}, '?').slice(0,-1) // slice removes the last &
-
-	var href = url.resolve(origin, pathConcated)
-
-	if (queryString.lenght > 1) {
-		href = url.resolve(href, queryString)
-	}
-
-	if (hash.lenght > 0) {
-		href = href + '#' + hash
-	}
-
-	return href
-}
-
-function urlsFrom({sitemap}) {
-	return fetch(sitemap).then(res => res.text()).then(xml => extractUrlsFrom({xml}))
-}
-
-function extractUrlsFrom({xml}) {
-	const urls = new Set()
-	const $ = cheerio.load(xml, {xmlMode: true})
-
-	$('loc').each(function () {
-		const url = $(this).text()
-		urls.add(url)
-	})
-
-	return urls
-}
+const {extractURLsfrom, constructURL} = require('./url-extra')
 
 // expected dimensions, can be different when rendered [{height: 600, width: 800}]
 function take({dir, urls, dimensions = [{}]}) {
@@ -104,11 +58,12 @@ function screenshot({nightmare, url, dir, width, height}) {
 }
 
 function screenshotSitemap({server, dir, dimensions}) {
-	let sitemap = href({ host: server.host, port: server.port, path: 'sitemap.xml' })
+	let sitemap = constructURL({ host: server.host, port: server.port, path: 'sitemap.xml' })
 
-	return urlsFrom({sitemap}).then(urls => {
+	return extractURLsfrom({sitemap}).then(urls => {
 		return take({dir, urls, dimensions})
 	})
 }
 
-module.exports = {take, urlsFrom, href, screenshotSitemap, screenshot, extractUrlsFrom}
+module.exports = {take, screenshotSitemap, screenshot}
+
