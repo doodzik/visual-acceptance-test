@@ -19,11 +19,11 @@
   "devDependencies": {
     "coveralls": "^3.0.0",
     "depcheck": "^0.6.8",
-    "eslint": "^4.9.0",
+    "eslint": "^4.10.0",
     "eslint-config": "github:doodzik/eslint-config",
     "husky": "^0.14.3",
     "mocha": "^4.0.1",
-    "nyc": "^11.2.1"
+    "nyc": "^11.3.0"
   },
   "dependencies": {
     "bluebird": "^3.5.1",

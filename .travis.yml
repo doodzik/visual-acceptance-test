@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - "node"
+  - "8"
 before_install:
   # package-lock.json was introduced in npm@5
   - npm install -g npm@5
