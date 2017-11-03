@@ -18,41 +18,72 @@ function take({dir, urls, dimensions = [{}]}) {
 	}).then(() => nightmare.end())
 }
 
+function _defaultIntValue (value, valueToAssign) {
+	const hasValue    = Number.isInteger(value)
+	const returnValue = hasValue ? value : valueToAssign
+	const prefix      = hasValue ? returnValue.toString() : 'AUTO'
+
+	return { 
+		value: returnValue, 
+		isDefault: !hasValue, 
+		toString() { 
+			return prefix 
+		} 
+	}
+}
+
+function _point({height, width}) {
+	const x = _defaultIntValue(width, 800)
+	const y = _defaultIntValue(height, 600)
+	const prefix = `[${x.toString()} ${y.toString()}]`
+
+	return { x, y, toString() { return prefix } }
+}
+
+function _toPNGFilename (dir, point, objURL) {
+	// remove first char "/" as it makes path.resolve trip over
+	const urlPathname = objURL.pathname.slice(1)
+	const urlHostname = objURL.hostname
+
+	const filename = urlPathname.length == 0 ? urlHostname + '.png' : urlPathname + '.png'
+	const normalizedFilename = path.normalize(filename)
+
+	const filepath = path.resolve(dir, point.toString())
+	const fullpath = path.resolve(filepath, normalizedFilename)
+  
+	return { 
+		dir: path.dirname(fullpath), 
+		file: fullpath
+	}
+}
+
+function getActualWebsiteDimensions () {
+	const body = document.querySelector('body')
+	const html = document.documentElement
+
+	let height = Math.max( body.scrollHeight, body.offsetHeight,
+		html.clientHeight, html.scrollHeight, html.offsetHeight )
+
+	let width  = Math.max( body.scrollWidth, body.offsetWidth,
+		html.clientWidth, html.scrollWidth, html.offsetWidth )
+	return { height, width }
+}
+
 function screenshot({nightmare, url, dir, width, height}) {
-	const hasHeight = Number.isInteger(height)
-	const hasWidth  = Number.isInteger(width)
+	// This should probably called dimension and not point
+	const point = _point({height, width})
 
-	const height2 = hasHeight ? height : 600
-	const width2  = hasWidth  ? width  : 800
-
-	return nightmare.viewport(width2, height2).goto(url).wait('body').evaluate(() => {
-		const body = document.querySelector('body')
-		const html = document.documentElement
-
-		let height = Math.max( body.scrollHeight, body.offsetHeight,
-			html.clientHeight, html.scrollHeight, html.offsetHeight )
-
-		let width  = Math.max( body.scrollWidth, body.offsetWidth,
-			html.clientWidth, html.scrollWidth, html.offsetWidth )
-		return { height, width }
-	})
+	return nightmare.viewport(point.x.value, point.y.value)
+		.goto(url)
+		.wait('body')
+		.evaluate(getActualWebsiteDimensions)
 		.then(dimension => {
-			const objURL  = new URL(url)
-			const urlPathname = objURL.pathname
-			const urlHostname = objURL.hostname
+			const file = _toPNGFilename(point, new URL(url), dir)
 
-			var prefix  = hasWidth  ? width2.toString()  : 'AUTO'
-			prefix     += 'x'
-			prefix     += hasHeight ? height2.toString() : 'AUTO'
-
-			const filename = urlPathname.length == 0 ? urlHostname + '.png' : urlPathname + '.png' 
-			const filepath = path.join(dir, prefix)
-			const fullpath = path.join(filepath, filename)
-
-			return fs.ensureDir(filepath).then(() => {
+			return fs.ensureDir(file.path).then(() => {
 				return nightmare.viewport(dimension.width, dimension.height)
 					.wait(1000)
-					.screenshot(fullpath)
+					.screenshot(file.fullpath)
 			})
 		})
 }
@@ -65,5 +96,5 @@ function screenshotSitemap({server, dir, dimensions}) {
 	})
 }
 
-module.exports = {take, screenshotSitemap, screenshot}
+module.exports = {take, screenshotSitemap, screenshot, _defaultIntValue, getActualWebsiteDimensions, _point, _toPNGFilename }
 
