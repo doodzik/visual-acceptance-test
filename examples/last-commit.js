@@ -42,6 +42,8 @@ Promise.all([
 			threshhold:  5,
 		})
 	})
-	.then(result => confirmation.browser({result}))
+	.then(result => {
+		return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
+	})
 	.then(server.destroy)
 

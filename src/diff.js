@@ -1,4 +1,4 @@
-const diffImage = require('./imageDiff')
+const {diffImage} = require('./imageDiff')
 const klaw = require('klaw')
 
 function walk (dir) {

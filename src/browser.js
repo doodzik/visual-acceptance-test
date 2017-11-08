@@ -6,18 +6,6 @@ const fs        = require('fs-extra')
 
 const {extractURLsfrom, constructURL} = require('./url-extra')
 
-// expected dimensions, can be different when rendered [{height: 600, width: 800}]
-function take({dir, urls, dimensions = [{}]}) {
-	var nightmare = new Nightmare({ show: false })
-
-	return Promise.each(dimensions, dimension => {
-		const { width, height } = dimension
-		return Promise.each(urls, url => {
-			return screenshot({nightmare, dir, url, width, height})
-		})
-	}).then(() => nightmare.end())
-}
-
 function _defaultIntValue (value, valueToAssign) {
 	const hasValue    = Number.isInteger(value)
 	const returnValue = hasValue ? value : valueToAssign
@@ -78,19 +66,27 @@ function screenshot({nightmare, url, dir, width, height}) {
 		.wait('body')
 		.evaluate(getActualWebsiteDimensions)
 		.then(dimension => {
-			const file = _toPNGFilename(point, new URL(url), dir)
+			const file = _toPNGFilename(dir, point, new URL(url))
 
-			return fs.ensureDir(file.path).then(() => {
+			return fs.ensureDir(file.dir).then(() => {
 				return nightmare.viewport(dimension.width, dimension.height)
 					.wait(1000)
-					.screenshot(file.fullpath)
+					.screenshot(file.file)
 			})
 		})
 }
 
-function screenshotSitemap({server, dir, dimensions}) {
-	let sitemap = constructURL({ host: server.host, port: server.port, path: 'sitemap.xml' })
+// expected dimensions, can be different when rendered [{height: 600, width: 800}]
+function take({dir, urls, dimensions = [{}], 
+	screenshot=screenshot, nightmare=new Nightmare({ show: false })}) {
+	return Promise.each(dimensions, dimension => {
+		const { width, height } = dimension
+		return Promise.each(urls, url => screenshot({dir, url, width, height, nightmare}))
+	}).then(() => nightmare.end())
+}
 
+function screenshotSitemap({server, dir, dimensions, take=take}) {
+	let sitemap = constructURL({ hostname: server.host, port: server.port, path: 'sitemap.xml' })
 	return extractURLsfrom({sitemap}).then(urls => {
 		return take({dir, urls, dimensions})
 	})

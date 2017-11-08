@@ -1,14 +1,19 @@
-const path      = require('path')
-const PNG = require('pngjs').PNG
-const fs = require('fs-extra')
+const path    = require('path')
+const PNG     = require('pngjs').PNG
+const fs      = require('fs-extra')
 const Promise = require('bluebird')
+
+function diffImageStat ({pastPath, currentPath, threshhold = 5}) {
+	return evalPNGs(pastPath, currentPath)
+		.spread((png1, png2) => diffAnalyze(png1, png2, threshhold))
+}
 
 function diffImage ({destination, past, current, file, threshhold = 5}) {
 	const diffPath    = path.resolve(destination, file)
 	const pastPath    = path.resolve(past, file)
 	const currentPath = path.resolve(current, file)
 
-	return evalPNGs(pastPath, currentPath, diffPath)
+	return evalPNGs(pastPath, currentPath)
 		.spread((png1, png2) => analyzePNGs(png1, png2, threshhold))
 		.then(data => {
 			const {stat} = data
@@ -76,7 +81,7 @@ function diffAnalyze(imgA, imgB, threshhold) {
 		stats.total++
 		if (imgA.data[i] !== imgB.data[i]) stats.differences++
 	}
-	stats.delta = 100 * (1 - (stats.differences/stats.total))
+	stats.delta   = 100 * (stats.differences/stats.total)
 	stats.isEqual = stats.delta < threshhold
 	return stats
 }
@@ -127,5 +132,5 @@ function writePNG(png, path) {
 	})
 }
 
-module.exports = diffImage
+module.exports = { diffImage, diffImageStat }
 

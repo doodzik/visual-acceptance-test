@@ -1,25 +1,30 @@
-const { URL }   = require('url') 
+const url       = require('url') 
+const { URL }   = url
 var assert      = require('assert')
 let path        = require('path')
-// let FileServer  = require('serve-dir')
-// const Nightmare = require('nightmare')
+let FileServer  = require('serve-dir')
+const Nightmare = require('nightmare')
+const fs        = require('fs-extra')
+
+const {diffImageStat} = require('../src/imageDiff')
 
 const {
-	// take, screenshotSitemap, screenshot, getActualWebsiteDimensions,
+	take, screenshotSitemap, screenshot, getActualWebsiteDimensions,
 	_defaultIntValue, _point, _toPNGFilename 
 } = require('../src/browser')
 
-// let testDir = path.resolve('./test/browser-test-dir/')
+let testDir = path.resolve('./test/browser-test-dir/')
 
 describe('Browser', function() {
-	// let server = new FileServer({dir: testDir})
-	// let url = server.listen().then(port => {
-	// 	return `http://${server.host}:${port}/`
-	// })
+	const server = new FileServer({dir: testDir})
+	const href   = server.listen().then(port => `http://${server.host}:${port}/`)
 
-	// after(done => {
-	// 	server.destroy().then(() => done())
-	// })
+	after(done => {
+		Promise.all([
+			server.destroy(),
+			fs.remove(path.resolve(testDir, '[1000 AUTO]', 'screenshot', 'index.html.png')),
+		]).then(() => done())
+	})
 
 	describe('#_defaultIntValue', () => {
 		context('when value is undefined', () => {
@@ -103,18 +108,54 @@ describe('Browser', function() {
 	})
 
 	describe('#getActualWebsiteDimensions', () => {
-		xit('', done => {
-			done()
+		context('when viewport smaller than size', () => {
+			it('get the fitting dimensions', done => {
+				const nightmare = new Nightmare({ show: false })
+				href.then(basehref => {
+					nightmare.viewport(600, 800)
+						.goto(url.resolve(basehref, 'actual-dimension.html'))
+						.wait('body')
+						.evaluate(getActualWebsiteDimensions)
+						.then(dimension => {
+							assert.equal(dimension.width, 1000)
+							assert.equal(dimension.height, 1000)
+							done()
+						})
+				})
+			})
+		})
+
+		context('when viewport bigger than size', () => {
+			it('get the initial dimensions', done => {
+				const nightmare = new Nightmare({ show: false })
+				href.then(basehref => {
+					nightmare.viewport(2000, 2000)
+						.goto(url.resolve(basehref, 'actual-dimension.html'))
+						.wait('body')
+						.evaluate(getActualWebsiteDimensions)
+						.then(dimension => {
+							assert.equal(dimension.width, 2000)
+							assert.ok(dimension.height > 1000)
+							done()
+						})
+				})
+			})
 		})
 	})
 
-	describe('#screenshot', () => {
-		xit('scales the website to the right height', done => {
-			// let nightmare = new Nightmare({ show: false })
-			// url.then(href => {
-			// 	return screenshot({nightmare, url: url.resolve(href, 'scales/index.html'), width, height})
-			// })
-			done()
+	describe('#screenshot', function() {
+		this.timeout(3000)
+		it('takes a screenshot', done => {
+			const nightmare = new Nightmare({ show: false })
+			href.then(basehref => {
+				return screenshot({url: url.resolve(basehref, 'screenshot/index.html'), nightmare: nightmare, width: 1000, dir: testDir})
+			}).then(() => {
+				const pastPath = path.resolve(testDir, 'screenshot', 'result.png')
+				const currentPath = path.resolve(testDir, '[1000 AUTO]', 'screenshot', 'index.html.png')
+				return diffImageStat({pastPath, currentPath, threshhold: 0.01})
+			}).then(stat => assert.ok(stat.isEqual))
+				.then(() => nightmare.end())
+				.then(() => done())
 		})
 
 		xit('marks if the width/height has overflown its boundry', done => {
@@ -122,15 +163,47 @@ describe('Browser', function() {
 		})
 	})
 
-	xdescribe('#take', () => {
-		it('', done => {
-			done()
+	describe('#take', () => {
+		it('applies all combinations to screenshot', done => {
+			const dir = 'nonExistingDir'
+			const urls = ['1', '2', '3', '4']
+			const dimensions = [{width: 1000}, {width:600, height: 700}]
+			let set = new Set(urls.map(u => dimensions.map(d => `${dir} ${u} ${d.width} ${d.height}`)).reduce((a, b) => a.concat(b), []))
+
+			const screenshotStub = function ({dir, url, width, height}) {
+				const str = `${dir} ${url} ${width} ${height}`
+				const res = set.delete(str)
+				assert.ok(res)
+			}
+
+			take({dir, urls, dimensions, screenshot: screenshotStub}).then(() => done())
 		})
 	})
 
-	xdescribe('#screenshotSitemap', () => {
-		it('', done => {
-			done()
+	describe('#screenshotSitemap', () => {
+		it('applies all urls from sitemap to take', done => {
+			href.then(() => {
+				const dims = [{width: 100}, {height:500}]
+				const set = new Set([
+					'https://dudzik.co/about:blank/index.html',
+					'https://dudzik.co/contact/index.html',
+					'https://dudzik.co/about:blank/index.html',
+					'https://dudzik.co/digress-into-development/index.html',
+					'https://dudzik.co/personal-blog/index.html',
+					'https://dudzik.co/about:blank/index.html',
+					'https://dudzik.co/about:blank/index.html',
+				])
+
+				const takeStub = function ({dir, urls, dimensions}) {
+					const newSet = new Set(urls)
+					const diff = new Set([...newSet].filter(x => !set.has(x)))
+					assert.ok(diff.size == 0)
+					assert.equal(dir, 'dir')
+					assert.deepEqual(dimensions, dims)
+				}
+
+				return screenshotSitemap({server, dir: 'dir', dimensions: dims, take: takeStub})
+			}).then(() => done())
 		})
 	})
 })

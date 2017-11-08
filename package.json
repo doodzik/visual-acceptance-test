@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --exit",
     "precommit": "npm test && npm run lint && depcheck . --ignores husky,depcheck,eslint-config",
     "lint": "eslint . --fix --ignore-path .gitignore -c ./node_modules/eslint-config/.eslintrc.js ",
     "lint-prod": "eslint . --fix --ignore-path .gitignore -c ./node_modules/eslint-config/.eslintrc.production.js ",
