@@ -45,5 +45,7 @@ Promise.all([
 	.then(result => {
 		return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
 	})
-	.then(server.destroy)
+	.then(exitCode => {
+		return server.destroy().then(() => process.exit(exitCode))
+	})
 

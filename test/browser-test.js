@@ -16,6 +16,8 @@ const {
 let testDir = path.resolve('./test/browser-test-dir/')
 
 describe('Browser', function() {
+	this.timeout(20000)
+
 	const server = new FileServer({dir: testDir})
 	const href   = server.listen().then(port => `http://${server.host}:${port}/`)
 
@@ -143,8 +145,7 @@ describe('Browser', function() {
 		})
 	})
 
-	describe('#screenshot', function() {
-		this.timeout(3000)
+	describe('#screenshot', () => {
 		it('takes a screenshot', done => {
 			const nightmare = new Nightmare({ show: false })
 			href.then(basehref => {
