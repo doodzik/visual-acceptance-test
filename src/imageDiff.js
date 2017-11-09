@@ -8,19 +8,19 @@ function diffImageStat ({pastPath, currentPath, threshhold = 5}) {
 		.spread((png1, png2) => diffAnalyze(png1, png2, threshhold))
 }
 
-function diffImage ({destination, past, current, file, threshhold = 5}) {
-	const diffPath    = path.resolve(destination, file)
-	const pastPath    = path.resolve(past, file)
-	const currentPath = path.resolve(current, file)
+function diffImage ({diffPath, pastPath, currentPath, filename, threshhold = 5}) {
+	const diff    = path.resolve(diffPath, filename)
+	const past    = path.resolve(pastPath, filename)
+	const current = path.resolve(currentPath, filename)
 
-	return evalPNGs(pastPath, currentPath)
+	return evalPNGs(past, current)
 		.spread((png1, png2) => analyzePNGs(png1, png2, threshhold))
 		.then(data => {
 			const {stat} = data
-			stat.expectedPngPath = pastPath
-			stat.actualPngPath   = currentPath
-			stat.diffPngPath     = diffPath
-			data.diffPath = diffPath
+			stat.expectedPngPath = past
+			stat.actualPngPath   = current
+			stat.diffPngPath     = diff
+			data.diffPath = diff
 			return data 
 		})
 		.then(writeResult)
@@ -71,8 +71,8 @@ function analyzePNGs (png1, png2, threshhold) {
 	return {png, stat}
 }
 
-function writeResult({png, stat, diffPath}){
-	writePNG(png, diffPath).then(() => stat)
+function writeResult({png, stat, diffPath}) {
+	return writePNG(png, diffPath).then(() => stat)
 }
 
 function diffAnalyze(imgA, imgB, threshhold) {
@@ -125,7 +125,7 @@ function evalImages (imgA, imgB) {
 
 function writePNG(png, path) {
 	let file = fs.createWriteStream(path)
-	let stream = png.pack(file).pipe()
+	let stream = png.pack().pipe(file)
 	return new Promise((resolve, reject) => {
 		stream.on('error', reject)
 		stream.on('finish', resolve)
