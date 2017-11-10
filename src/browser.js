@@ -78,7 +78,7 @@ function screenshot({nightmare, url, dir, width, height}) {
 
 // expected dimensions, can be different when rendered [{height: 600, width: 800}]
 function take({dir, urls, dimensions = [{}], 
-	screenshot=screenshot, nightmare=new Nightmare({ show: false })}) {
+	screenshot=screenshot, nightmare=new Nightmare({ show: false, frame: false, useContentSize: true})}) {
 	return Promise.each(dimensions, dimension => {
 		const { width, height } = dimension
 		return Promise.each(urls, url => screenshot({dir, url, width, height, nightmare}))

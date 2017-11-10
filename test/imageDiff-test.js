@@ -26,7 +26,7 @@ describe('diffImage', function() {
 					expectedPngPath: path.resolve(pastPath, 'base.png'),
 					actualPngPath: path.resolve(currentPath,'base.png'),
 					diffPngPath: path.resolve(diffPath, 'base.png'),
-          children: [],
+					children: [],
 				}, stat)
 
 				diffImageStat({
