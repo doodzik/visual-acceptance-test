@@ -20,6 +20,7 @@ function diffImage ({diffPath, pastPath, currentPath, filename, threshhold = 5})
 			stat.expectedPngPath = past
 			stat.actualPngPath   = current
 			stat.diffPngPath     = diff
+			stat.children        = []
 			data.diffPath = diff
 			return data 
 		})
@@ -29,17 +30,15 @@ function diffImage ({diffPath, pastPath, currentPath, filename, threshhold = 5})
 function readPNG(path) {
 	return new Promise((resolve, reject) => {
 		fs.createReadStream(path)
+			.on('error', reject)
 			.pipe(new PNG({
 				filterType: 4
 			}))
-			.on('error', function(){ 
-				reject()
-			})
 			.on('parsed', function() {
 				resolve(this)
 			})
 	})
-		.catch(() => { return {} })
+		.catch(() => { return false })
 }
 
 function emptyPNG ({height, width}) {
@@ -51,12 +50,15 @@ function emptyPNG ({height, width}) {
 }
 
 function evalPNGs (pathA, pathB) {
-	return Promise.all([readPNG(pathA), readPNG(pathB)]).spread((png1, png2) => {
-		if (Object.keys(png1).length === 0 && png1.constructor === Object) {
+	return Promise.all([
+		readPNG(pathA), 
+		readPNG(pathB), 
+	]).spread((png1, png2) => {
+		if (png1 === false) {
 			const p1 = emptyPNG(png2)
 			return [p1, png2]
 		}
-		else if (Object.keys(png2).length === 0 && png2.constructor === Object) {
+		else if (png2 === false) {
 			const p2 = emptyPNG(png1)
 			return [png1, p2]
 		}
@@ -72,7 +74,10 @@ function analyzePNGs (png1, png2, threshhold) {
 }
 
 function writeResult({png, stat, diffPath}) {
-	return writePNG(png, diffPath).then(() => stat)
+	const diffDir = path.dirname(diffPath)
+	return fs.ensureDir(diffDir).then(() => {
+		return writePNG(png, diffPath)
+	}).then(() => stat)
 }
 
 function diffAnalyze(imgA, imgB, threshhold) {

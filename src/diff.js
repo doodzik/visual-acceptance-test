@@ -7,23 +7,28 @@ function walk (dir) {
 	return new Promise((resolve, reject) => {
 		klaw(dir)
 			.on('data', item => {
-				items.add(item.path.slice(length)) 
+				if (item.path.endsWith('.png')) {
+					// + 1 so we get rid of the / which causes issues with path.resolve
+					items.add(item.path.slice(length + 1)) 
+				}
 			})
 			.on('error', reject)
 			.on('end', () => resolve(items)) 
 	})
 }
 
-function diff ({destination, past, current, threshhold}) {
-	return Promise.all([walk(past), walk(current)])
+function diff ({diffPath, pastPath, currentPath, threshhold}) {
+	return Promise.all([walk(pastPath), walk(currentPath)])
 		.then(res => {
 			const [pastFiles, currentFiles] = res
 			const files = Array.from(new Set([...pastFiles, ...currentFiles]))
-			return Promise.all(files.map(file => diffImage({destination, past, current, file, threshhold})))
+			return Promise.all(files.map(filename => diffImage({diffPath, pastPath, currentPath, filename, threshhold})))
 		})
 	// TODO nest results & add name and path key -> children
-		.then(results => results)
+	// .then(results => results)
 }
 
-module.exports = diff
+module.exports = {
+	diff,
+}
 

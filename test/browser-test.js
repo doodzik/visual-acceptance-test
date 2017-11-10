@@ -146,7 +146,7 @@ describe('Browser', function() {
 	})
 
 	describe('#screenshot', () => {
-		it('takes a screenshot', done => {
+		xit('takes a screenshot', done => {
 			const nightmare = new Nightmare({ show: false })
 			href.then(basehref => {
 				return screenshot({url: url.resolve(basehref, 'screenshot/index.html'), nightmare: nightmare, width: 1000, dir: testDir})
@@ -157,6 +157,7 @@ describe('Browser', function() {
 			}).then(stat => assert.ok(stat.isEqual))
 				.then(() => nightmare.end())
 				.then(() => done())
+        .catch(done)
 		})
 
 		xit('marks if the width/height has overflown its boundry', done => {
