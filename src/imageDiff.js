@@ -3,12 +3,24 @@ const PNG     = require('pngjs').PNG
 const fs      = require('fs-extra')
 const Promise = require('bluebird')
 
+function diffImageNoPersist ({past, current, filename, threshhold = 5}) {
+	const pastPath   = path.resolve(past, filename)
+	const currentPath = path.resolve(current, filename)
+	return diffImageStat({pastPath, currentPath, threshhold}).then(stat => {
+		stat.expectedPngPath = pastPath
+		stat.actualPngPath   = currentPath
+		stat.filename        = filename
+		stat.children        = []
+		return stat
+	})
+}
+
 function diffImageStat ({pastPath, currentPath, threshhold = 5}) {
 	return evalPNGs(pastPath, currentPath)
 		.spread((png1, png2) => diffAnalyze(png1, png2, threshhold))
 }
 
-function diffImage ({diffPath, pastPath, currentPath, filename, threshhold = 5}) {
+function diffImagePersist ({diffPath, pastPath, currentPath, filename, threshhold = 5}) {
 	const diff    = path.resolve(diffPath, filename)
 	const past    = path.resolve(pastPath, filename)
 	const current = path.resolve(currentPath, filename)
@@ -20,9 +32,10 @@ function diffImage ({diffPath, pastPath, currentPath, filename, threshhold = 5})
 			stat.expectedPngPath = past
 			stat.actualPngPath   = current
 			stat.diffPngPath     = diff
+			stat.filename        = filename
 			stat.children        = []
 			data.diffPath = diff
-			return data 
+			return data
 		})
 		.then(writeResult)
 }
@@ -51,8 +64,8 @@ function emptyPNG ({height, width}) {
 
 function evalPNGs (pathA, pathB) {
 	return Promise.all([
-		readPNG(pathA), 
-		readPNG(pathB), 
+		readPNG(pathA),
+		readPNG(pathB),
 	]).spread((png1, png2) => {
 		if (png1 === false) {
 			const p1 = emptyPNG(png2)
@@ -137,5 +150,5 @@ function writePNG(png, path) {
 	})
 }
 
-module.exports = { diffImage, diffImageStat }
+module.exports = { diffImagePersist, diffImageStat, diffImageNoPersist }
 

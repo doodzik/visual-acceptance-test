@@ -2,7 +2,7 @@ let path   = require('path')
 let assert = require('assert')
 let fs     = require('fs-extra')
 
-const {diffImageStat, diffImage} = require('../src/imageDiff')
+const {diffImageStat, diffImagePersist} = require('../src/imageDiff')
 
 let testDir = path.resolve('./test/imageDiff-test-dir/')
 
@@ -14,18 +14,19 @@ describe('diffImage', function() {
 		]).then(() => done())
 	})
 
-	describe('#diffImage', () => {
+	describe('#diffImagePersist', () => {
 		it('test', done => {
 			const pastPath    = path.resolve(testDir, 'diffImage', 'past')
 			const currentPath = path.resolve(testDir, 'diffImage', 'current')
 			const diffPath = path.resolve(testDir,    'diffImage', 'diff')
 			const filename = 'base.png'
-			diffImage({diffPath, pastPath, currentPath, filename, threshhold: 5}).then(stat => {
+			diffImagePersist({diffPath, pastPath, currentPath, filename, threshhold: 5}).then(stat => {
 				assert.deepEqual({ 
 					total: 40000, differences: 22500, delta: 56.25, isEqual: false,
 					expectedPngPath: path.resolve(pastPath, 'base.png'),
 					actualPngPath: path.resolve(currentPath,'base.png'),
 					diffPngPath: path.resolve(diffPath, 'base.png'),
+					filename: 'base.png',
 					children: [],
 				}, stat)
 

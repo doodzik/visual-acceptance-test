@@ -36,14 +36,14 @@ Promise.all([
 	.then(time.now)
 	.then(() => {
 		return diff({
-			destination: pathTo('DIFF'),
-			past:        pathTo(time.pastCommit),
-			current:     pathTo('HEAD'),
-			threshhold:  5,
+			actual:      pathTo(time.pastCommit),
+			expected:    pathTo('HEAD'),
+			persistDiff: false
 		})
 	})
 	.then(result => {
-		return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
+		// return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
+		confirmation.cli({result})
 	})
 	.then(exitCode => {
 		return server.destroy().then(() => process.exit(exitCode))

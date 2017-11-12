@@ -1,4 +1,4 @@
-const {diffImage} = require('./imageDiff')
+const {diffImagePersist, diffImageNoPersist} = require('./imageDiff')
 const klaw = require('klaw')
 
 function walk (dir) {
@@ -17,12 +17,18 @@ function walk (dir) {
 	})
 }
 
-function diff ({diffPath, pastPath, currentPath, threshhold}) {
-	return Promise.all([walk(pastPath), walk(currentPath)])
+function diff ({diff, expected, actual, persistDiff = true, threshhold = 5}) {
+	return Promise.all([walk(expected), walk(actual)])
 		.then(res => {
 			const [pastFiles, currentFiles] = res
 			const files = Array.from(new Set([...pastFiles, ...currentFiles]))
-			return Promise.all(files.map(filename => diffImage({diffPath, pastPath, currentPath, filename, threshhold})))
+			return Promise.all(files.map(filename => {
+				if (persistDiff) {
+					return diffImagePersist({diffPath: diff, pastPath: expected, currentPath: actual, filename, threshhold})
+				} else {
+					return diffImageNoPersist({pastPath: expected, currentPath: actual, filename, threshhold})
+				}
+			}))
 		})
 	// TODO nest results & add name and path key -> children
 	// .then(results => results)
