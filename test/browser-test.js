@@ -184,7 +184,7 @@ describe('Browser', function() {
 				assert.ok(res)
 			}
 
-			take({dir, urls, dimensions, screenshot: screenshotStub}).then(() => done())
+			take({dir, urls, dimensions, screenshotFn: screenshotStub}).then(() => done()).catch(done)
 		})
 	})
 
@@ -210,7 +210,7 @@ describe('Browser', function() {
 					assert.deepEqual(dimensions, dims)
 				}
 
-				return screenshotSitemap({server, dir: 'dir', dimensions: dims, take: takeStub})
+				return screenshotSitemap({server, dir: 'dir', dimensions: dims, takeFn: takeStub})
 			}).then(() => done())
 		})
 	})

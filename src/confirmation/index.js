@@ -1,5 +1,5 @@
-const browser = require('./confirmation/browser')
-const cli     = require('./confirmation/cli')
+const browser = require('./browser')
+const cli     = require('./cli') 
 
 module.exports = {
 	browser,
