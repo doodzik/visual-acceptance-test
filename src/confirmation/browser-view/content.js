@@ -59,7 +59,7 @@ function testCase(element, index) {
 
 	function imageOpt(alt, src) {
     const uri = "data:image/png;base64," + base64_encode(src)
-		return {class : 'small-img', onclick : 'toggleMaxWidth(this)', alt, src: uri}
+		return {class : 'small-img', onclick : 'toggleMaxWidth(this)', alt, title: alt, src: uri}
 	}
 
 	function images() {
