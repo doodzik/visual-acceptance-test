@@ -18,9 +18,6 @@ class LastCommit {
 		return new Promise((resolve, reject) => {
 			shell.exec('git status -s', (code, stdout, stderr) => {
 				this.checkout = stdout.length == 0
-        console.log(this.checkout)
-        console.log(stdout)
-        console.log('------------------------')
 				return this.git.stash(['--all']).then(() => {
 					if (!this.checkout) {
 						return resolve()
@@ -36,10 +33,10 @@ class LastCommit {
 		})
 			.then(commit => {
 				this.pastCommit = commit
-				if (!this.checkout) {
-					return resolve()
-				}
-				return new Promise(function(resolve, reject) {
+				return new Promise((resolve, reject) => {
+          if (!this.checkout) {
+            return resolve()
+          }
 					shell.exec('git checkout ' + commit, function(code, stdout, stderr) {
 						if (stderr) {
 							console.log(code, stderr, reject)
@@ -48,8 +45,6 @@ class LastCommit {
 						resolve()
 					})
 				})
-
-				// return this.git.checkout(commit)
 			})
 	}
 
