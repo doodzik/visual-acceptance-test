@@ -18,6 +18,9 @@ class LastCommit {
 		return new Promise((resolve, reject) => {
 			shell.exec('git status -s', (code, stdout, stderr) => {
 				this.checkout = stdout.length == 0
+        console.log(this.checkout)
+        console.log(stdout)
+        console.log('------------------------')
 				return this.git.stash(['--all']).then(() => {
 					if (!this.checkout) {
 						return resolve()
@@ -52,7 +55,7 @@ class LastCommit {
 
 	// change to head and apply stash
 	now () {
-		const cmd = (this.checkout) ? 'git checkout . && git checkout - && git checkout stash -- .' : 'git checkout . && git checkout stash -- .' 
+		const cmd = (this.checkout) ? 'git checkout . && git checkout - && git checkout stash -- .' : 'git checkout stash -- .' 
 
 		return new Promise(function(resolve, reject) {
 			shell.exec(cmd, function(code, stdout, stderr) {
