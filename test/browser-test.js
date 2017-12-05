@@ -16,7 +16,7 @@ const {
 let testDir = path.resolve('./test/browser-test-dir/')
 
 describe('Browser', function() {
-	this.timeout(20000)
+	this.timeout(100000)
 
 	const server = new FileServer({dir: testDir})
 	const href   = server.listen().then(port => `http://${server.host}:${port}/`)
