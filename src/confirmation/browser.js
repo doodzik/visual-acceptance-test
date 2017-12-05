@@ -33,8 +33,8 @@ function confirmationBrowser({result, from = 1000, to = 9000, host = '127.0.0.1'
 			destroy(server).then(() => resolve(1))
 		})
 
-		app.post('/accept', (req, res) => {
-			res.send('accept')
+		app.post('/acceptTest', (req, res) => {
+			res.send('acceptTest')
 			destroy(server).then(() => resolve(0))
 		})
 
