@@ -75,7 +75,6 @@ return Promise.all([
   .then(exitCode => {
     return server.destroy().then(() => process.exit(exitCode))
   })
-  .catch(console.log)
 ```
 </details>
 
@@ -140,7 +139,6 @@ return Promise.all([
   .then(exitCode => {
     return server.destroy().then(() => process.exit(exitCode))
   })
-  .catch(console.log)
 ```
 
 And then add the following helper in your tests where you want to test your website visuals.

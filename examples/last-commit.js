@@ -53,9 +53,7 @@ return Promise.all([
 		})
 	})
 	.then(result => {
-		// TODO fix browser displaying
-	  // return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
-		return confirmation.cli({result})
+	  return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
 	})
 	.then(exitCode => {
 		return server.destroy().then(() => process.exit(exitCode))
