@@ -108,7 +108,7 @@ var shell = require('shelljs')
 function build(pathToResults) {
   return new Promise(function(resolve, reject) {
     shell.exec('npm install', function(code, stdout, stderr) {
-      shell.exec(`VIS_DIR=${pathToResults} make test`, function(code, stdout, stderr) {
+      shell.exec(`VAT_DIR=${pathToResults} make test`, function(code, stdout, stderr) {
         resolve()
       })
     })
@@ -141,9 +141,22 @@ return Promise.all([
   })
 ```
 
-And then add the following helper in your tests where you want to test your website visuals.
+And then add the following helper in your tests where you want to test your website visuals. [NightmareJs](https://github.com/segmentio/nightmare)
 ``` javascript
-// TODO
+const { browser, } = require('visual-acceptance-test')
+const Nightmare    = require('nightmare')
+
+browser.dynamicScreenshot(Nightmare) 
+
+const nightmare=new Nightmare({ show: false, frame: false, useContentSize: true})
+
+nightmare
+  .goto('https://duckduckgo.com')
+  .type('#search_form_input_homepage', 'github nightmare')
+  .click('#search_button_homepage')
+  .wait('#r1-0 a.result__a')
+  .vatScreenshot(() => document.querySelector('#r1-0 a.result__a').href)
+  .end()
 ``` 
 </details>
 
