@@ -15,7 +15,7 @@ Configure your Visual Accaptance Test
 <details>
   <summary>Static Regression Test</summary>
 
-Create a `vis.js` file in the project root
+Create a `vat.js` file in the project root
 ```javascript
 const {
   browser,
@@ -80,7 +80,7 @@ return Promise.all([
 
 <details>
   <summary>Dynamic Regression Test</summary>
-Create a `vis.js` file in the project root
+Create a `vat.js` file in the project root
 
 ```javascript
 const {
@@ -169,7 +169,7 @@ nightmare
 
 Run your acceptance tests by executing
 ```
-$ node vis.js
+$ node vat.js
 ```
 
 # Projects

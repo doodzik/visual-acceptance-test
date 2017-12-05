@@ -16,30 +16,30 @@ class LastCommit {
 	// make stash and change to last commit
 	past () {
 		return new Promise((resolve, reject) => {
-			shell.exec('git status -s', (code, stdout, stderr) => {
+			shell.exec('git status -s', (_code, stdout) => {
 				this.checkout = stdout.length == 0
 				return this.git.stash(['--all']).then(() => {
 					if (!this.checkout) {
-            shell.exec('git rev-parse HEAD', function(code, stdout, stderr) {
-              resolve(stdout.replace(/(\r\n|\n|\r)/gm,""))
-            })
+						shell.exec('git rev-parse HEAD', function(_code, stdout) {
+							resolve(stdout.replace(/(\r\n|\n|\r)/gm,''))
+						})
 					} else {
-            shell.exec('git log --branches -1 --skip 1 --pretty="%H"', function(code, stdout, stderr) {
-              if (stderr) {
-                return reject(new Error(code + ' ' + stderr))
-              }
-              resolve(stdout.replace(/(\r\n|\n|\r)/gm,""))
-            })
-          }
+						shell.exec('git log --branches -1 --skip 1 --pretty="%H"', function(code, stdout, stderr) {
+							if (stderr) {
+								return reject(new Error(code + ' ' + stderr))
+							}
+							resolve(stdout.replace(/(\r\n|\n|\r)/gm,''))
+						})
+					}
 				})
 			})
 		})
 			.then(commit => {
 				this.pastCommit = commit
 				return new Promise((resolve, reject) => {
-          if (!this.checkout) {
-            return resolve()
-          }
+					if (!this.checkout) {
+						return resolve()
+					}
 					shell.exec('git checkout ' + commit, function(code, stdout, stderr) {
 						if (stderr) {
 							console.log(code, stderr, reject)

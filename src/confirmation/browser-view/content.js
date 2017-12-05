@@ -1,10 +1,10 @@
 const {ul, div, img, xid, li, input} = require('javascript-html-tags')
 
-const fs = require('fs');
+const fs = require('fs')
 
 function base64_encode(file) {
-    var bitmap = fs.readFileSync(file);
-    return new Buffer(bitmap).toString('base64');
+	var bitmap = fs.readFileSync(file)
+	return new Buffer(bitmap).toString('base64')
 }
 
 const hashCode = function(str) {
@@ -58,7 +58,7 @@ function testCase(element, index) {
 	}
 
 	function imageOpt(alt, src) {
-    const uri = "data:image/png;base64," + base64_encode(src)
+		const uri = 'data:image/png;base64,' + base64_encode(src)
 		return {class : 'small-img', onclick : 'toggleMaxWidth(this)', alt, title: alt, src: uri}
 	}
 
@@ -75,7 +75,7 @@ function testCase(element, index) {
 }
 
 const actions = div(
-  input({type: 'button', value:'accept', onclick: 'acceptTest();'}),
+	input({type: 'button', value:'accept', onclick: 'acceptTest();'}),
 	input({type: 'button', value:'reject', onclick: 'reject();'}))
 
 module.exports = {

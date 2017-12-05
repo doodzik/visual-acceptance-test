@@ -23,9 +23,9 @@ function pathTo(dir) {
 var shell = require('shelljs')
 
 function build() {
-	return new Promise(function(resolve, reject) {
-		shell.exec('npm install', function(code, stdout, stderr) {
-			shell.exec('make build', function(code, stdout, stderr) {
+	return new Promise(function(resolve) {
+		shell.exec('npm install', function() {
+			shell.exec('make build', function() {
 				resolve()
 			})
 		})
@@ -53,7 +53,7 @@ return Promise.all([
 		})
 	})
 	.then(result => {
-	  return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
+		return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
 	})
 	.then(exitCode => {
 		return server.destroy().then(() => process.exit(exitCode))

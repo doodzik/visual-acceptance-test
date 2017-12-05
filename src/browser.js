@@ -28,12 +28,12 @@ function _point({height, width}) {
 	return { x, y, toString() { return prefix } }
 }
 
-function _toPNGFilename (dir, point, objURL, detail="") {
+function _toPNGFilename (dir, point, objURL, detail='') {
 	// remove first char "/" as it makes path.resolve trip over
 	const urlPathname = objURL.pathname.slice(1)
 	const urlHostname = objURL.hostname
 
-  const detail2 = (detail.length > 0) ? " - " + detail : detail
+	const detail2 = (detail.length > 0) ? ' - ' + detail : detail
 	const filename = urlPathname.length == 0 ? urlHostname + detail2 + '.png' : urlPathname + '.png'
 	const normalizedFilename = path.normalize(filename)
 
@@ -80,26 +80,42 @@ function screenshot({nightmare, url, dir, width, height}) {
 // pass Nightmare
 function dynamicScreenshot(nightmare) {
 // {detail: String = '', migrateFrom: {url: String, detail: String =""} = {} ignore }
- nightmare.action('vatScreenshot', function({detail, migrateFrom = {}} , done) {
+	nightmare.action('vatScreenshot', function({detail, migrateFrom = {}} , done) {
+		const dimensions = JSON.parse(process.env.DIMENSIONS)
+		this.evaluate_now(() => {
+			dimensions.reduce((self, dim) => {
+				return self.dynamicScreenshotSingle({detail, migrateFrom, height: dim.height, width: dim.width})
+			}, this)
+		}, done)
+	})
+}
 
-  this.wait('body')
-      .evaluate(getActualWebsiteDimensions)
-      .evaluate(function(dimension ) {
-        const url = migrateFrom.url || document.querySelector('#url').href
-        const detail2 = migrateFrom.detail || detail
-        return {url, detail: detail2, dimensions}
-      })
-      .then(data => {
-        const file = _toPNGFilename(process.env.VAT_DIR, point, new URL(data.url), data.detail)
-        fs.ensureDir(file.dir).then(() => {
-          return this.viewport(data.dimension.width, data.dimension.height)
-            .wait(1000)
-            .screenshot(file.file)
-            .evaluate_now(() => {
-            }, done)
-        })
-      })
-  });
+
+// pass Nightmare
+function dynamicScreenshotSingle(nightmare) {
+// {detail: String = '', migrateFrom: {url: String, detail: String =""} = {} ignore }
+	nightmare.action('vatScreenshotDimensions', function({detail, migrateFrom = {}, height, width} , done) {
+
+		const point = _point({height, width})
+
+		this.wait('body')
+			.evaluate(getActualWebsiteDimensions)
+			.evaluate(function(dimension) {
+				const url = migrateFrom.url || document.querySelector('#url').href
+				const detail2 = migrateFrom.detail || detail
+				return {url, detail: detail2, dimension}
+			})
+			.then(data => {
+				const file = _toPNGFilename(process.env.VAT_DIR, point, new URL(data.url), data.detail)
+				fs.ensureDir(file.dir).then(() => {
+					return this.viewport(data.dimension.width, data.dimension.height)
+						.wait(1000)
+						.screenshot(file.file)
+						.evaluate_now(() => {
+						}, done)
+				})
+			})
+	})
 }
 
 // expected dimensions, can be different when rendered [{height: 600, width: 800}]
@@ -118,5 +134,5 @@ function screenshotSitemap({server, dir, dimensions, takeFn=take}) {
 	})
 }
 
-module.exports = {take, screenshotSitemap, screenshot, _defaultIntValue, getActualWebsiteDimensions, _point, _toPNGFilename, dynamicScreenshot}
+module.exports = {take, screenshotSitemap, screenshot, _defaultIntValue, getActualWebsiteDimensions, _point, _toPNGFilename, dynamicScreenshot, dynamicScreenshotSingle}
 
