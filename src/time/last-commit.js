@@ -53,7 +53,7 @@ class LastCommit {
 
 	// change to head and apply stash
 	now () {
-		const cmd = (this.checkout) ? 'git checkout . && git checkout - && git clean -fdx -e .visual-acceptance-test && git stash pop' : 'git clean -fdx -e .visual-acceptance-test && git stash pop'
+		const cmd = (this.checkout) ? 'git clean -fdx -e .visual-acceptance-test && git checkout . && git checkout - && git stash pop' : 'git reset --hard && git clean -fdx -e .visual-acceptance-test && git stash pop'
 
 		return new Promise(function(resolve, reject) {
 			shell.exec(cmd, function(code, stdout, stderr) {
