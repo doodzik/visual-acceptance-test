@@ -15,7 +15,7 @@ class LastCommit {
 
 	// make stash and change to last commit
 	past () {
-		return new Promise(function(resolve, reject) {
+		return new Promise((resolve, reject) => {
 			shell.exec('git status -s', (code, stdout, stderr) => {
 				this.checkout = stdout.length == 0
 				return this.git.stash(['--all']).then(() => {
