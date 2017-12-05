@@ -1,10 +1,14 @@
 const Time         = require('./src/time/index')
-const VIS          = require('./src/vis')
 const confirmation = require('./src/confirmation/index')
+const browser = require('./src/browser.js')
+const FileServer = require('serve-dir')
+const diff = require('./src/diff.js')
 
 module.exports = {
 	Time,
 	confirmation,
-	VIS,
+	browser,
+	FileServer,
+	diff,
 }
 
