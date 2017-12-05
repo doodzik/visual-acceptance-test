@@ -52,7 +52,7 @@ class LastCommit {
 
 	// change to head and apply stash
 	now () {
-		const cmd = (this.checkout) ? 'git checkout . && git checkout - && git stash pop' : 'git checkout . && git stash pop' 
+		const cmd = (this.checkout) ? 'git checkout . && git checkout - && git checkout stash -- .' : 'git checkout . && git checkout stash -- .' 
 
 		return new Promise(function(resolve, reject) {
 			shell.exec(cmd, function(code, stdout, stderr) {
