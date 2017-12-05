@@ -18,7 +18,7 @@ function destroy (server) {
 	})
 }
 
-function confirmationBrowser({result, dir, from = 1000, to = 9000, host = '127.0.0.1'}) {
+function confirmationBrowser({result, from = 1000, to = 9000, host = '127.0.0.1'}) {
 	return new Promise((resolve, reject) => {
 		const app = express()
 		var server
