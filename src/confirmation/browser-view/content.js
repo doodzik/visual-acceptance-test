@@ -1,5 +1,12 @@
 const {ul, div, img, xid, li, input} = require('javascript-html-tags')
 
+const fs = require('fs');
+
+function base64_encode(file) {
+    var bitmap = fs.readFileSync(file);
+    return new Buffer(bitmap).toString('base64');
+}
+
 const hashCode = function(str) {
 	var hash = 0, i, chr, len
 	if (str.length === 0) return hash
@@ -51,7 +58,8 @@ function testCase(element, index) {
 	}
 
 	function imageOpt(alt, src) {
-		return {class : 'small-img', onclick : 'toggleMaxWidth(this)', alt, src}
+    const uri = "data:image/png;base64," + base64_encode(src)
+		return {class : 'small-img', onclick : 'toggleMaxWidth(this)', alt, src: uri}
 	}
 
 	function images() {
