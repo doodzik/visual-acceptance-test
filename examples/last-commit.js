@@ -25,22 +25,15 @@ var shell = require('shelljs')
 function build() {
 	return new Promise(function(resolve, reject) {
 		shell.exec('npm install', function(code, stdout, stderr) {
-			if (stderr) {
-				console.log(code, stdout, stderr)
-				return reject()
-			}
 			shell.exec('make build', function(code, stdout, stderr) {
-				if (stderr) {
-					console.log(code, stdout, stderr)
-					return reject()
-				}
 				resolve()
 			})
 		})
 	})
 }
 
-Promise.all([
+
+return Promise.all([
 	server.listen(),
 	build(),
 	fs.remove(pathTo('HEAD')),
@@ -55,16 +48,17 @@ Promise.all([
 		return diff({
 			actual:      pathTo(time.pastCommit),
 			expected:    pathTo('HEAD'),
-			persistDiff: false
+			diff:        pathTo('DIFF'),
+			persistDiff: true
 		})
 	})
 	.then(result => {
-		// return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
+		// TODO fix browser displaying
+	  // return (process.env.CI) ? confirmation.cli({result}) : confirmation.browser({result})
 		return confirmation.cli({result})
 	})
 	.then(exitCode => {
 		return server.destroy().then(() => process.exit(exitCode))
 	})
 	.catch(console.log)
-
 
