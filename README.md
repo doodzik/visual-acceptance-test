@@ -16,7 +16,7 @@ Configure your Visual Accaptance Test
   <summary>Static Regression Test</summary>
 
 Create a `vis.js` file in the project root
-```
+```javascript
 const {
 	browser,
 	FileServer,
@@ -84,6 +84,7 @@ return Promise.all([
 <details>
   <summary>Dynamic Regression Test</summary>
 Create a `vis.js` file in the project root
+
 ```javascript
 const {
 	browser,
@@ -158,13 +159,15 @@ And then add the following helper in your tests where you want to test your webs
 ``` 
 </details>
 
-# Examples
+# Projects
 
 feel free to open a pr to add your project (only links to source code)
 
 <details>
 <summary>Static Regression Tests</summary>
+
 [dudzik.co](https://github.com/doodzik/dudzik.co)
+
 </details>
 
 <details>
