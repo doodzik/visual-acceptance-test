@@ -26,7 +26,7 @@ function diff ({diff, expected, actual, persistDiff = true, threshhold = 5}) {
 				if (persistDiff) {
 					return diffImagePersist({diffPath: diff, pastPath: expected, currentPath: actual, filename, threshhold})
 				} else {
-					return diffImageNoPersist({pastPath: expected, currentPath: actual, filename, threshhold})
+					return diffImageNoPersist({past: expected, current: actual, filename, threshhold})
 				}
 			}))
 		})
