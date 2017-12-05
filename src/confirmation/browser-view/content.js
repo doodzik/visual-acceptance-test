@@ -66,7 +66,8 @@ function testCase(element, index) {
 		container())
 }
 
-const actions = div(input({type: 'button', value:'reject', onclick: 'reject();'}),
+const actions = div(
+  input({type: 'button', value:'accept', onclick: 'accept();'}),
 	input({type: 'button', value:'reject', onclick: 'reject();'}))
 
 module.exports = {

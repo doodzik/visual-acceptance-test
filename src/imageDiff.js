@@ -29,10 +29,11 @@ function diffImagePersist ({diffPath, pastPath, currentPath, filename, threshhol
 		.spread((png1, png2) => analyzePNGs(png1, png2, threshhold))
 		.then(data => {
 			const {stat} = data
-			stat.expectedPngPath = past
-			stat.actualPngPath   = current
-			stat.diffPngPath     = diff
+			stat.expectedPngPath = "file://" + past
+			stat.actualPngPath   = "file://" + current
+			stat.diffPngPath     = "file://" + diff
 			stat.path            = diff
+			stat.name            = diff
 			stat.filename        = filename
 			stat.children        = []
 			data.diffPath = diff
