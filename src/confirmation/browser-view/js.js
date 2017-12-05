@@ -40,6 +40,6 @@ module.exports = {
 	toggleMaxWidth,
 	toggleVisibility,
 	reject: post('reject'),
-	accept: post('accept'),
+	accept: post('acceptTest'),
 }
 
