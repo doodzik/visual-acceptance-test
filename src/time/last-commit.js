@@ -15,28 +15,31 @@ class LastCommit {
 
 	// make stash and change to last commit
 	past () {
-		return new Promise(function(resolve, reject) {
-			shell.exec('git status -s', (code, stdout, stderr) => {
+		return new Promise((resolve, reject) => {
+			shell.exec('git status -s', (_code, stdout) => {
 				this.checkout = stdout.length == 0
 				return this.git.stash(['--all']).then(() => {
 					if (!this.checkout) {
-						return resolve()
+						shell.exec('git rev-parse HEAD', function(_code, stdout) {
+							resolve(stdout.replace(/(\r\n|\n|\r)/gm,''))
+						})
+					} else {
+						shell.exec('git log --branches -1 --skip 1 --pretty="%H"', function(code, stdout, stderr) {
+							if (stderr) {
+								return reject(new Error(code + ' ' + stderr))
+							}
+							resolve(stdout.replace(/(\r\n|\n|\r)/gm,''))
+						})
 					}
-					shell.exec('git log --branches -1 --skip 1 --pretty="%H"', function(code, stdout, stderr) {
-						if (stderr) {
-							return reject(new Error(code + ' ' + stderr))
-						}
-						resolve(stdout)
-					})
 				})
 			})
 		})
 			.then(commit => {
 				this.pastCommit = commit
-				if (!this.checkout) {
-					return resolve()
-				}
-				return new Promise(function(resolve, reject) {
+				return new Promise((resolve, reject) => {
+					if (!this.checkout) {
+						return resolve()
+					}
 					shell.exec('git checkout ' + commit, function(code, stdout, stderr) {
 						if (stderr) {
 							console.log(code, stderr, reject)
@@ -45,14 +48,12 @@ class LastCommit {
 						resolve()
 					})
 				})
-
-				// return this.git.checkout(commit)
 			})
 	}
 
 	// change to head and apply stash
 	now () {
-		const cmd = (this.checkout) ? 'git checkout . && git checkout - && git stash pop' : 'git checkout . && git stash pop' 
+		const cmd = (this.checkout) ? 'git clean -fdx -e .visual-acceptance-test && git checkout . && git checkout - && git stash pop' : 'git reset --hard && git clean -fdx -e .visual-acceptance-test && git stash pop'
 
 		return new Promise(function(resolve, reject) {
 			shell.exec(cmd, function(code, stdout, stderr) {

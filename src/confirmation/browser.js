@@ -19,7 +19,7 @@ function destroy (server) {
 }
 
 function confirmationBrowser({result, from = 1000, to = 9000, host = '127.0.0.1'}) {
-	return new Promise((resolve, reject) => {
+	return new Promise(resolve => {
 		const app = express()
 		var server
 
@@ -30,12 +30,12 @@ function confirmationBrowser({result, from = 1000, to = 9000, host = '127.0.0.1'
 
 		app.post('/reject', (req, res) => {
 			res.send('reject')
-			destroy(server).then(reject)
+			destroy(server).then(() => resolve(1))
 		})
 
-		app.post('/accept', (req, res) => {
-			res.send('accept')
-			destroy(server).then(resolve)
+		app.post('/acceptTest', (req, res) => {
+			res.send('acceptTest')
+			destroy(server).then(() => resolve(0))
 		})
 
 		server = http.createServer(app)

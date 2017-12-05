@@ -32,6 +32,8 @@ function diffImagePersist ({diffPath, pastPath, currentPath, filename, threshhol
 			stat.expectedPngPath = past
 			stat.actualPngPath   = current
 			stat.diffPngPath     = diff
+			stat.path            = diff
+			stat.name            = diff
 			stat.filename        = filename
 			stat.children        = []
 			data.diffPath = diff
