@@ -21,14 +21,14 @@ class LastCommit {
 				return this.git.stash(['--all']).then(() => {
 					if (!this.checkout) {
             shell.exec('git rev-parse HEAD', function(code, stdout, stderr) {
-              resolve(stdout)
+              resolve(stdout.replace(/(\r\n|\n|\r)/gm,""))
             })
 					} else {
             shell.exec('git log --branches -1 --skip 1 --pretty="%H"', function(code, stdout, stderr) {
               if (stderr) {
                 return reject(new Error(code + ' ' + stderr))
               }
-              resolve(stdout)
+              resolve(stdout.replace(/(\r\n|\n|\r)/gm,""))
             })
           }
 				})
