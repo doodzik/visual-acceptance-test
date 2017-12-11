@@ -29,7 +29,7 @@
     "bluebird": "^3.5.1",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "^5.0.0",
     "javascript-html-tags": "github:doodzik/javascript-html-tags",
     "klaw": "^2.1.0",
     "listen-random-port": "^1.0.0",
