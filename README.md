@@ -80,6 +80,9 @@ return Promise.all([
 
 <details>
   <summary>Dynamic Regression Test</summary>
+  
+  > DOESN'T WORK YET
+  
 Create a `vat.js` file in the project root
 
 ```javascript
