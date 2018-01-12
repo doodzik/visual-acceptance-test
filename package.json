@@ -39,7 +39,7 @@
     "pngjs": "^3.3.0",
     "serve-dir": "github:doodzik/serve-dir",
     "server-destroy": "^1.0.1",
-    "shelljs": "^0.7.8",
+    "shelljs": "^0.8.0",
     "simple-git": "^1.80.1"
   },
   "nyc": {
