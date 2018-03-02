@@ -33,7 +33,7 @@
     "javascript-html-tags": "github:doodzik/javascript-html-tags",
     "klaw": "^2.1.0",
     "listen-random-port": "^1.0.0",
-    "nightmare": "^2.10.0",
+    "nightmare": "^3.0.0",
     "node-fetch": "^1.7.3",
     "openurl": "^1.1.1",
     "pngjs": "^3.3.0",
