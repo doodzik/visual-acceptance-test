@@ -6,6 +6,10 @@
   "directories": {
     "test": "test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/doodzik/visual-acceptance-test"
+  },
   "scripts": {
     "test": "mocha --exit",
     "precommit": "npm test && npm run lint && depcheck . --ignores husky,depcheck,eslint-config",
@@ -15,32 +19,32 @@
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "author": "Frederik Dudzik",
-  "license": "GPL3",
+  "license": "GPL-3.0",
   "devDependencies": {
     "coveralls": "^3.0.0",
-    "depcheck": "^0.6.8",
-    "eslint": "^4.10.0",
+    "depcheck": "^0.6.9",
+    "eslint": "^4.18.2",
     "eslint-config": "github:doodzik/eslint-config",
     "husky": "^0.14.3",
-    "mocha": "^4.0.1",
-    "nyc": "^11.3.0"
+    "mocha": "^5.0.4",
+    "nyc": "^11.5.0"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "^5.0.0",
     "javascript-html-tags": "github:doodzik/javascript-html-tags",
-    "klaw": "^2.1.0",
+    "klaw": "^2.1.1",
     "listen-random-port": "^1.0.0",
-    "nightmare": "^2.10.0",
-    "node-fetch": "^1.7.3",
+    "nightmare": "^3.0.0",
+    "node-fetch": "^2.1.1",
     "openurl": "^1.1.1",
-    "pngjs": "^3.3.0",
+    "pngjs": "^3.3.2",
     "serve-dir": "github:doodzik/serve-dir",
     "server-destroy": "^1.0.1",
-    "shelljs": "^0.7.8",
-    "simple-git": "^1.80.1"
+    "shelljs": "^0.8.1",
+    "simple-git": "^1.92.0"
   },
   "nyc": {
     "check-coverage": true,
