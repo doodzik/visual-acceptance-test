@@ -161,7 +161,7 @@ describe('Browser', function() {
 				const currentPath = path.resolve(testDir, '[1000 AUTO]', 'screenshot', 'index.html.png')
 				return diffImageStat({pastPath, currentPath, threshhold: 0.01})
 			})
-        .then(stat => assert.ok(stat.isEqual))
+				.then(stat => assert.ok(stat.isEqual))
 				.then(() => nightmare.end())
 				.then(() => done())
 				.catch(done)
