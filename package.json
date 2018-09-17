@@ -44,7 +44,7 @@
     "serve-dir": "github:doodzik/serve-dir",
     "server-destroy": "^1.0.1",
     "shelljs": "^0.8.1",
-    "simple-git": "^1.92.0"
+    "simple-git": "^1.98.0"
   },
   "nyc": {
     "check-coverage": true,
