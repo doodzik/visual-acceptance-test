@@ -30,7 +30,7 @@
     "nyc": "^11.5.0"
   },
   "dependencies": {
-    "bluebird": "^3.5.1",
+    "bluebird": "^3.7.1",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.2",
     "fs-extra": "^5.0.0",
