@@ -21,7 +21,7 @@
   "author": "Frederik Dudzik",
   "license": "GPL-3.0",
   "devDependencies": {
-    "coveralls": "^3.0.0",
+    "coveralls": "^3.0.8",
     "depcheck": "^0.6.9",
     "eslint": "^4.18.2",
     "eslint-config": "github:doodzik/eslint-config",
